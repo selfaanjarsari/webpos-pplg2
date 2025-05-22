@@ -8,7 +8,7 @@ function generateId()
 {
     global $koneksi;
 
-    $queryId = mysqli_query($koneksi, "SELECT MAX(id_barang) AS maxid FROM tbl_barang");
+    $queryId = mysqli_query($koneksi, "SELECT max(id_barang) as maxid FROM tbl_barang");
     $data = mysqli_fetch_array($queryId);
 
     $maxid = $data['maxid'] ?? 'BRG-000'; // Default value if null
@@ -43,7 +43,7 @@ function insert($data)
     if ($gambar != null) {
         $gambar = uploadimg(null, $id);
     } else {
-        $gambar = 'kardus.jpg';
+        $gambar = 'default-brg.png';
     }
 
     //gambar tidak sesuai validasi
@@ -56,14 +56,14 @@ function insert($data)
     return mysqli_affected_rows($koneksi);
 }
 
-function delete($id, $foto)
+function delete($id, $gbr)
 {
     global $koneksi;
 
-    $sqlData = "DELETE FROM tbl_user WHERE userid = $id";
-    mysqli_query($koneksi, $sqlData);
-    if ($foto != 'default.png') {
-        unlink('../assets/image/' . $foto);
+    $sqlDel = "DELETE FROM tbl_barang WHERE id_barang = '$id'";
+    mysqli_query($koneksi, $sqlDel);
+    if ($gbr != 'default-brg.png') {
+        unlink('../assets/image/' . $gbr);
     }
     return mysqli_affected_rows($koneksi);
 }
